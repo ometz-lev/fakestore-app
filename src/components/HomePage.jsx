@@ -3,9 +3,11 @@
 //Styled using bootstrap components and classes to make it visually appealing.
 
 import { Container, Carousel, Row, Col, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 const HomePage = () => {
+  const navigate = useNavigate();
 
   return (
   
@@ -18,11 +20,9 @@ const HomePage = () => {
             <br />
             Browse our wide selection of fake products and find something you love!
           </p>
-          <Link to="/products">
-            <Button variant="primary" size="lg" className="mt-3 px-4 py-2">
+            <Button variant="primary" size="lg" className="mt-3 px-4 py-2" onClick={() => navigate('/products')}>
               Shop Now
             </Button>
-          </Link>
         </div>
       </Container>
     </div>
