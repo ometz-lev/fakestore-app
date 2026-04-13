@@ -1,0 +1,85 @@
+.navbar-brand, .ms-auto {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  color: green !important;
+}
+
+.hero-banner {
+  /* 1. Stretch to full screen width regardless of parent */
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+
+  /* 2. Responsive Height */
+  height: 90vh; /* 90% of screen height on desktop */
+  min-height: 500px; /* Prevents it from getting too small on mobile */
+
+  /* 3. Background Image Scaling */
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+              url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2070');
+  background-size: cover;     /* Ensures image covers the whole area */
+  background-position: center; /* Keeps the focus in the middle */
+  background-attachment: fixed; /* Optional: Creates a parallax scroll effect */
+
+  /* 4. Center Content */
+  display: flex;
+  align-items: center;
+}
+
+
+.hover-shadow:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+  transition: all 0.3s ease;
+}
+
+.transition {
+  transition: all 0.3s ease;
+}
+
+/* Mobile-first responsive utilities */
+@media (max-width: 576px) {
+  .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .btn {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+}
+
+/* Touch-friendly button sizes on mobile */
+@media (max-width: 768px) {
+  .btn {
+    min-height: 44px; /* iOS recommended touch target size */
+    font-size: 1rem;
+  }
+
+  .hero-banner {
+    height: 90dvh; /* dynamic viewport height */
+    min-height: 350px;
+    background-attachment: scroll; /* Parallax doesn't work well on mobile */
+  }
+
+  .hero-content {
+    padding: 2rem !important; /* Reduce padding so text has room */
+    max-width: 100%;  
+  }
+}
