@@ -6,70 +6,50 @@ import { Container, Row, Col, Card, Button, Spinner, Badge } from 'react-bootstr
 import { Link } from 'react-router-dom';
 
 function ProductList() {
-  const [products, setProducts] = useState([]);         // State to store products
-  const [loading, setLoading] = useState(true);         // State to track loading status
-  const [error, setError] = useState(null);             // State to track any errors during fetch
+  const [products, setProducts] = useState([]);         
+  const [loading, setLoading] = useState(true);         
+  const [error, setError] = useState(null);
 
   // useEffect to fetch products when component mounts
   useEffect(() => {
-    const controller = new AbortController();
-    let isMounted = true;
+  const controller = new AbortController();
 
-    const fetchProducts = async () => {
+  const fetchProducts = async () => {
+    try {
       setLoading(true);
-      try {
-        const response = await axios.get('https://fakestoreapi.com/products', {
-          signal: controller.signal
-        });
-        
-        // Logic to handle different API response structures
-        let actualData = [];
-        
-        if (Array.isArray(response.data)) {
-          actualData = response.data;
-        } else if (response.data && Array.isArray(response.data.data)) {
-          // This specific API often nests it under 'data'
-          actualData = response.data.data;
-        } else if (response.data && Array.isArray(response.data.products)) {
-          actualData = response.data.products;
-        }
+      const { data } = await axios.get('https://fakestoreapi.com/products', {
+        signal: controller.signal
+      });
+      
+      // FakeStoreAPI always returns an array directly
+      setProducts(data); 
+      setError(null);
+    } catch (err) {
+      if (axios.isCancel(err)) return;
+      setError(err.message);
+    } finally {
+      if (!controller.signal.aborted) setLoading(false);
+    }
+  };
 
-        if (isMounted) {
-          setProducts(actualData);
-          setLoading(false);
-        }
-      } catch (err) {
-        if (err.name !== 'AbortError' && isMounted) {
-          console.error("Fetch error:", err);
-          setError(err);
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchProducts();
-
-    return () => {
-      isMounted = false;
-      controller.abort();
-    };
-  }, []); // Empty dependency array means this effect runs only once when component mounts
+  fetchProducts();
+  return () => controller.abort();
+}, []);// Empty dependency array means this effect runs only once when component mounts
 
   if (loading) {
     return <Spinner animation="border" variant="primary" />;
   }
 
   if (error) {
-    return <p>Error: {error?.message || 'Something went wrong'}</p>
+    return <p>Error: {error?.message || 'Something is wrong'}</p>
   }
 
   // Render the list of products in a structured layout
   //Responsive grid layout to display products in rows and columns, adjusting based on screen size.
-  //Each product is displayed in a card format, showing the product image, title, price, and details.
-  //Each product card includes a link to the ProductDetails component, allowing users to view more information about the product when clicked.
+ 
   return (
     <Container className="py-5">
-      <h2 className="mb-4 text-center fw-bold">Our Collection</h2>                     
+      <h2 className="mb-4 text-center fw-bold">Our Collection of Items</h2>                     
       <Row xs={1} sm={2} md={3} lg={4} className="g-4">                                                    
         {products.map((product) => {
           const productId = product.id || product._id;
@@ -95,20 +75,15 @@ function ProductList() {
                   ${product.price}
                 </Card.Text>
                 <div className="mt-auto">
-                  <Link to={`/products/${productId}`} className="w-100 mb-2">
-                    <Button variant="outline-primary" className="w-100">
-                      View Product
-                    </Button>
-                  </Link>
                   <div className="d-flex gap-2 my-2">
                     <Link to={`/products/${productId}/edit`} className="flex-fill">
                       <Button variant="outline-primary" className="w-100">
-                        Edit Product
+                        View Product
                       </Button>
                     </Link>
                     <Link to={`/products/${productId}/delete`} className="flex-fill">
-                      <Button variant="outline-danger" className="w-100">
-                        Delete Product
+                      <Button variant="outline-primary" className="w-100">
+                        Edit Product
                       </Button>
                     </Link>
                   </div>
