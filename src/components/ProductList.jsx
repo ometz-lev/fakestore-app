@@ -76,12 +76,12 @@ function ProductList() {
                 </Card.Text>
                 <div className="mt-auto">
                   <div className="d-flex gap-2 my-2">
-                    <Link to={`/products/${productId}/edit`} className="flex-fill">
+                    <Link to={`/products/${productId}`} className="flex-fill">
                       <Button variant="outline-primary" className="w-100">
                         View Product
                       </Button>
                     </Link>
-                    <Link to={`/products/${productId}/delete`} className="flex-fill">
+                    <Link to={`/products/${productId}/edit`} className="flex-fill">
                       <Button variant="outline-primary" className="w-100">
                         Edit Product
                       </Button>
